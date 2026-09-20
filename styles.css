@@ -300,11 +300,25 @@
   .timeline-item:last-child {
     padding-bottom: 0;
   }
+
+  /* The dot and its connecting line both anchor on the exact same
+     coordinate (--dot-center) and use translateX(-50%) to center
+     themselves on it. This asks the browser to center each element on
+     its OWN width using its transform engine, rather than me computing
+     "half of 16 minus half of 2" by hand and hoping both elements'
+     positions get pixel-snapped the same way. Whatever width either
+     one is, they can only ever land centered on the same point. */
   .timeline-item::after {
     content: '';
     position: absolute;
     left: var(--dot-center);
     transform: translateX(-50%);
+    /* The dot is centered at top:4px + 16px/2 = 12px. Starting the line
+       there (instead of top:0) means it begins exactly at this item's
+       own dot instead of poking out slightly above it. Ending 12px past
+       this item's own bottom edge (instead of bottom:0) means it reaches
+       exactly the NEXT item's dot-center too, rather than stopping short
+       at the boundary between the two list items. */
     top: 12px;
     bottom: -12px;
     width: 2px;
