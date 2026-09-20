@@ -84,3 +84,26 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
   fadeEls.forEach((el) => fadeObserver.observe(el));
+
+  const linkedinLink = document.getElementById('linkedinLink');
+  if (linkedinLink) {
+    linkedinLink.addEventListener('click', (e) => {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (!isMobile) return; // desktop: let the normal https link behave as-is
+
+      e.preventDefault();
+      const webUrl = linkedinLink.href;
+      const appUrl = 'linkedin://in/jamesyoung9';
+      const clickedAt = Date.now();
+
+      // If the app opens, this tab gets backgrounded and the fallback below
+      // never fires (or fires too late to matter). If nothing handles the
+      // custom scheme, we land back here quickly and go to the web version.
+      window.location.href = appUrl;
+      setTimeout(() => {
+        if (Date.now() - clickedAt < 2000) {
+          window.location.href = webUrl;
+        }
+      }, 600);
+    });
+  }

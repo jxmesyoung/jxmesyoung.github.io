@@ -23,7 +23,7 @@
     color-scheme: dark;
   }
 
-  * { box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; }
 
   html {
     scroll-behavior: smooth;
@@ -284,25 +284,11 @@
 
   /* --- Timeline --- */
   .timeline {
-    --dot-size: 16px;
-    --dot-left: 2px;
-    --line-width: 2px;
+    --dot-center: 10px;
     position: relative;
     list-style: none;
     margin: 0 0 3.5rem;
     padding: 0;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    /* Derived from the dot's own position/size, so the line is
-       always mathematically centered on the dot, at every breakpoint. */
-    left: calc(var(--dot-left) + (var(--dot-size) / 2) - (var(--line-width) / 2));
-    top: 6px;
-    bottom: 6px;
-    width: var(--line-width);
-    background: var(--rule);
   }
 
   .timeline-item {
@@ -314,14 +300,29 @@
   .timeline-item:last-child {
     padding-bottom: 0;
   }
+  .timeline-item::after {
+    content: '';
+    position: absolute;
+    left: var(--dot-center);
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--rule);
+  }
+
+  .timeline-item:last-child::after {
+    display: none;
+  }
 
   .timeline-item::before {
     content: '';
     position: absolute;
-    left: var(--dot-left);
+    left: var(--dot-center);
+    transform: translateX(-50%);
     top: 4px;
-    width: var(--dot-size);
-    height: var(--dot-size);
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--bg);
     border: 2px solid var(--accent);
@@ -706,6 +707,15 @@
     .wrap {
       padding-left: 10%;
       padding-right: 10%;
+    }
+
+    /* Some dates are long enough to wrap on narrow screens regardless,
+       so put the date on its own row by default instead of trying
+       (and sometimes failing) to keep it inline and right-aligned. */
+    .timeline-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
     }
 
     .bio {
