@@ -96,11 +96,21 @@
     margin-bottom: 3rem;
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 900px) {
     .header-top {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       gap: 1.1rem;
+      text-align: center;
+    }
+
+    .header-text {
+      width: 100%;
+      text-align: center;
+    }
+
+    .links {
+      justify-content: center;
     }
   }
 
@@ -254,7 +264,7 @@
   @media (max-width: 560px) {
     .links { gap: 0.6rem; }
     .link-icon { width: 2.75rem; height: 2.75rem; min-width: 2.75rem; }
-    .link-icon::after { display: none; }
+    .link-icon::after { display: none;}
   }
 
   /* --- Section heading --- */
@@ -274,6 +284,9 @@
 
   /* --- Timeline --- */
   .timeline {
+    --dot-size: 16px;
+    --dot-left: 2px;
+    --line-width: 2px;
     position: relative;
     list-style: none;
     margin: 0 0 3.5rem;
@@ -283,10 +296,12 @@
   .timeline::before {
     content: '';
     position: absolute;
-    left: 9px;
+    /* Derived from the dot's own position/size, so the line is
+       always mathematically centered on the dot, at every breakpoint. */
+    left: calc(var(--dot-left) + (var(--dot-size) / 2) - (var(--line-width) / 2));
     top: 6px;
     bottom: 6px;
-    width: 2px;
+    width: var(--line-width);
     background: var(--rule);
   }
 
@@ -303,10 +318,10 @@
   .timeline-item::before {
     content: '';
     position: absolute;
-    left: 2px;
+    left: var(--dot-left);
     top: 4px;
-    width: 16px;
-    height: 16px;
+    width: var(--dot-size);
+    height: var(--dot-size);
     border-radius: 50%;
     background: var(--bg);
     border: 2px solid var(--accent);
@@ -319,7 +334,8 @@
   }
 
   .timeline-item:not(:first-child)::before {
-    display: none;
+    background: #000000;
+    border-color: var(--rule);
   }
 
   .timeline-top {
@@ -413,17 +429,8 @@
     padding: 0.5rem 0.25rem 1rem;
   }
 
-  @media (max-width: 720px) {
-    .scripts-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (max-width: 480px) {
-    .scripts-grid {
-      grid-template-columns: 1fr;
-      max-width: 260px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  @media (max-width: 900px) {
+    .scripts-grid { grid-template-columns: 1fr; }
   }
 
   .script-card {
@@ -641,8 +648,8 @@
   .timeline-item:nth-child(4)::before { transition-delay: 0.45s; }
   .timeline-item:nth-child(5)::before { transition-delay: 0.6s; }
 
-  /* --- Desktop: larger text throughout, mobile sizing (<=560px) left untouched --- */
-  @media (min-width: 561px) {
+  /* --- Desktop only: larger text throughout. Phones and tablets (<=900px) use the smaller, centered sizing below instead. --- */
+  @media (min-width: 901px) {
     .headshot-wrap {
       width: 180px;
       height: 180px;
@@ -691,6 +698,150 @@
 
     .card-pages {
       font-size: 0.92rem;
+    }
+  }
+
+  /* --- Phones & tablets: centered content, smaller type so nothing feels oversized on a narrow screen --- */
+  @media (max-width: 900px) {
+    .wrap {
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+
+    .bio {
+      text-align: left;
+      max-width: none;
+    }
+
+    .section-heading {
+      text-align: center;
+    }
+
+    .section-sub {
+      text-align: center;
+      max-width: none;
+    }
+
+    .timeline-desc {
+      text-align: left;
+    }
+
+    .scripts-grid {
+      max-width: 75%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .script-card {
+      aspect-ratio: 4 / 5;
+      padding: 1.3rem 1.2rem 1.4rem;
+      text-align: left;
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      text-align: left;
+      margin-top: clamp(1rem, 6vw, 2.5rem);
+    }
+
+    .card-pages {
+      font-size: 1.05rem;
+      text-align: left;
+    }
+
+    .modal h3 {
+      font-size: 1.25rem;
+    }
+
+    .modal .modal-pages,
+    .modal .modal-logline {
+      font-size: 0.95rem;
+    }
+
+    .modal .preview-btn {
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+    }
+  }
+
+  /* --- Phone: smallest, most compact type --- */
+  @media (max-width: 560px) {
+    h1 {
+      font-size: clamp(1.9rem, 8vw, 2.5rem);
+    }
+
+    .role {
+      font-size: 0.95rem;
+    }
+
+    .bio {
+      font-size: 1.02rem;
+    }
+
+    .section-heading {
+      font-size: 1.25rem;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+    }
+
+    .timeline-title,
+    .timeline-org,
+    .timeline-date,
+    .timeline-desc {
+      font-size: 0.92rem;
+    }
+  }
+
+  /* --- Tablet: a step up from phone, still short of desktop --- */
+  @media (min-width: 561px) and (max-width: 900px) {
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 2.9rem);
+    }
+
+    .role {
+      font-size: 1.05rem;
+    }
+
+    .bio {
+      font-size: 1.15rem;
+    }
+
+    .section-heading {
+      font-size: 1.4rem;
+    }
+
+    .section-sub {
+      font-size: 1.1rem;
+    }
+
+    .timeline-title,
+    .timeline-org,
+    .timeline-date,
+    .timeline-desc {
+      font-size: 1rem;
+    }
+
+    .script-card {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .card-title {
+      /* Card is aspect-ratio 4/5, so height = 1.25 x width. A margin-top
+         of 28% (percentages resolve against width) lands at roughly
+         28 / 1.25 ≈ 22% down the card's actual height — comfortably
+         inside the 20-25% range, and it scales with the card automatically. */
+      margin-top: 28%;
+      font-size: 1.5rem;
+    }
+
+    .card-pages {
+      font-size: 1.15rem;
     }
   }
 
